@@ -24,8 +24,11 @@
 include_recipe "postgresql::client"
 
 # randomly generate postgres password
-node.set_unless[:postgresql][:password][:postgres] = secure_password
-node.save unless Chef::Config[:solo]
+if(node[:postgresql][:password][:postgres]).empty?
+ 	node[:postgresql][:password][:postgres] = secure_password
+ 	node.save unless Chef::Config[:solo]
+end
+
 
 case node[:postgresql][:version]
 when "8.3"
